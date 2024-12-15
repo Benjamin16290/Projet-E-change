@@ -83,6 +83,13 @@ function Header() {
                   >
                     Dashboard
                   </NavLink>
+                  <NavLink
+                    to="/Login"
+                    aria-label="Se connecter ou supprimer un compte"
+                    tabIndex="0"
+                  >
+                    Connexion-Supression
+                  </NavLink>
                   <button
                     className="btn-logout"
                     onClick={onClickLogout}

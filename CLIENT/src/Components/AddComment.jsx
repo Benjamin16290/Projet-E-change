@@ -1,6 +1,7 @@
 import { useSelector } from "react-redux";
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
+import FormComment from "./FormComment";
 
 function AddComment({
   articleId,
@@ -9,12 +10,11 @@ function AddComment({
   toggleCommentsVisibility,
   isLoading,
 }) {
-  const [newComment, setNewComment] = useState("");
   const [isFormVisible, setIsFormVisible] = useState(false);
   const [isCommentsVisible, setIsCommentsVisible] = useState(false);
 
   const user = useSelector((state) => state.user);
-  const { isLogged, id: userId } = user;
+  const { isLogged } = user;
 
   function toggleComments() {
     setIsCommentsVisible(!isCommentsVisible);
@@ -23,34 +23,6 @@ function AddComment({
 
   function toggleAddCommentVisibility() {
     setIsFormVisible(!isFormVisible);
-  }
-
-  async function submitComment(e) {
-    e.preventDefault();
-
-    const response = await fetch(
-      `http://localhost:9000/api/v1/comment/create/${articleId}`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify({
-          articleId,
-          content: newComment,
-          user_id: userId,
-        }),
-      }
-    );
-
-    if (response.ok) {
-      const data = await response.json();
-      setNewComment("");
-      if (data.comment) {
-        onCommentAdded(data.comment);
-      }
-    }
   }
 
   return (
@@ -64,7 +36,7 @@ function AddComment({
             : "Afficher les commentaires"
         }
       >
-        {isCommentsVisible ? "fermer" : "Commentaires"}
+        {isCommentsVisible ? "Fermer" : "Commentaires"}
       </button>
 
       {isCommentsVisible && comments && comments.length > 0 && (
@@ -93,24 +65,8 @@ function AddComment({
         {isFormVisible ? "Fermer" : "Commenter"}
       </button>
 
-      {isFormVisible && (
-        <form
-          className="form-comment"
-          onSubmit={submitComment}
-          aria-label="Formulaire d'ajout de commentaire"
-        >
-          <textarea
-            id="comment"
-            name="content"
-            placeholder="Commentaire..."
-            value={newComment}
-            onChange={(e) => setNewComment(e.target.value)}
-            aria-label="Saisir votre commentaire"
-          ></textarea>
-          <button type="submit" aria-label="Envoyer le commentaire">
-            Ajouter
-          </button>
-        </form>
+      {isFormVisible && isLogged && (
+        <FormComment articleId={articleId} onCommentAdded={onCommentAdded} />
       )}
 
       {!isLoading && !isLogged && (

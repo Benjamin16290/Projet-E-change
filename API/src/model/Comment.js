@@ -6,11 +6,12 @@ class Comment {
     static async findAll() {
         const SELECT_All_COMMENTS = `
         SELECT 
-        comment.id, content,
-        publish_date,
-        user_id,
+        comment.id,
+        comment.content,
+        comment.publish_date,
+        comment.user_id,
         comment.status,
-        user.username 
+        user.username
         FROM comment
         JOIN user
         ON comment.user_id = user.id

@@ -2,7 +2,12 @@ import closeMenu from "../../hook/closeMenu";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { login, loginFailed, setMsg } from "../../Store/Slices/user";
+import {
+  login,
+  loginFailed,
+  setMsg,
+  deleteUser,
+} from "../../Store/Slices/user";
 
 const Login = () => {
   closeMenu();
@@ -64,7 +69,8 @@ const Login = () => {
       );
 
       if (response.ok) {
-        dispatch(setMsg("Utilisateur supprimé"));
+        dispatch(deleteUser("Utilisateur supprimé"));
+        navigate("/");
       } else {
         const errorData = await response.json();
         dispatch(setMsg("Erreur lors de la suppression : " + errorData.msg));

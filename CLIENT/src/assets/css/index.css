@@ -674,6 +674,7 @@ table tbody tr:nth-child(even) {
 .btn-delete {
   background-color: #710c04;
   color: white;
+  margin-top: 10px;
 }
 
 .form-contact {
